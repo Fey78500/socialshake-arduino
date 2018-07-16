@@ -3,13 +3,14 @@
 
 #include <ESP8266WiFi.h>
 #include <FirebaseArduino.h>
+//needed for library
+#include <DNSServer.h>
+#include <ESP8266WebServer.h>
+#include <WiFiManager.h>         //https://github.com/tzapu/WiFiManager
 
 // Set these to run example.
 #define FIREBASE_HOST "socialshake-fc175.firebaseio.com"
 #define FIREBASE_AUTH "l0lIzs1qXbtEh2iTAhkqlHdZLjEvHWNk2Nzmf3p9"
-
-#define WIFI_SSID "Fey-3T"//"ESGI" //Fey-3T
-#define WIFI_PASSWORD "nbvcxw098"//"Reseau-GES" //nbvcxw098
  
 #define RST_PIN         D3         // Configurable, see typical pin layout above
 #define SS_PIN          D8        // Configurable, see typical pin layout above
@@ -33,24 +34,15 @@ void setup() {
   pinMode(greenPin, OUTPUT);
   pinMode(bluePin, OUTPUT);
   // connect to wifi.
-    colorRGB(255,255,0);
-    delay(1500);
-
-  WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
-  Serial.print("connecting");
-
-  while (WiFi.status() != WL_CONNECTED) {
-    colorRGB(255,0,255);
-    Serial.print(".");
-    delay(500);
-    colorRGB(255,255,255);
-    delay(500);
-  }
-  colorRGB(255,0,255);
+  colorRGB(255,255,0);
   delay(1500);
-  Serial.println();
-  Serial.print("connected: ");
-  Serial.println(WiFi.localIP());
+
+  WiFiManager wifiManager;
+  wifiManager.autoConnect("SocialShake");
+  Serial.println("connected...yeey :)");
+ 
+  colorRGB(255,0,255);
+  delay(2000);
   
   Firebase.begin(FIREBASE_HOST, FIREBASE_AUTH);
 }
