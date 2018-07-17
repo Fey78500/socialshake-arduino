@@ -61,10 +61,8 @@ void loop() {
 
   //Create a object
   JsonObject& obj = jsonBuffer.createObject();
-  obj["from"] = String(USER_ID);
-  obj["to"] = String(id);
-  obj["matchFrom"] = "";
-  obj["matchTo"] = "";
+  obj["gloveIdFrom"] = String(USER_ID);
+  obj["glovaIdTo"] = String(id);
 
   //Push to firebase
   Firebase.push("invitations", obj);
