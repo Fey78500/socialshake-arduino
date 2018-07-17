@@ -8,6 +8,7 @@
 #include <ESP8266WebServer.h>
 #include <WiFiManager.h>         //https://github.com/tzapu/WiFiManager
 
+
 // Set these to run example.
 #define FIREBASE_HOST "socialshake-fc175.firebaseio.com"
 #define FIREBASE_AUTH "l0lIzs1qXbtEh2iTAhkqlHdZLjEvHWNk2Nzmf3p9"
@@ -22,24 +23,25 @@ MFRC522 mfrc522(SS_PIN, RST_PIN);  // Create MFRC522 instance
 StaticJsonBuffer<200> jsonBuffer;
 
 //PROJECT 5 RGB LED
-//int redPin   = D5;
-int greenPin = D4;//D4
-int bluePin  = D2;
+//D0 D1 D2 D4
+int redPin   = D4;
+int greenPin = D2;//D4
+int bluePin  = D1;
 
 void setup() {
   Serial.begin(9600);   // Initialize serial communications with the PC
   SPI.begin();      // Init SPI bus
   mfrc522.PCD_Init();   // Init MFRC522
-//pinMode(redPin, OUTPUT);
+  pinMode(redPin, OUTPUT);
   pinMode(greenPin, OUTPUT);
   pinMode(bluePin, OUTPUT);
   // connect to wifi.
-  colorRGB(255,255,0);
+  colorRGB(0,255,255);
   delay(1500);
 
   WiFiManager wifiManager;
   wifiManager.autoConnect("SocialShake");
-  Serial.println("connected...yeey :)");
+  Serial.println("connected...yeey 🙂");
  
   colorRGB(255,0,255);
   delay(2000);
@@ -48,7 +50,7 @@ void setup() {
 }
  
 void loop() {
-  colorRGB(255,255,255);
+  colorRGB(0,0,0);
   // Look for new cards
   if (! mfrc522.PICC_IsNewCardPresent() || ! mfrc522.PICC_ReadCardSerial()) {
     return;
@@ -63,6 +65,8 @@ void loop() {
   JsonObject& obj = jsonBuffer.createObject();
   obj["gloveIdFrom"] = String(USER_ID);
   obj["glovaIdTo"] = String(id);
+  obj["matchFrom"] = "";
+  obj["matchTo"] = "";
 
   //Push to firebase
   Firebase.push("invitations", obj);
@@ -70,6 +74,8 @@ void loop() {
   if (Firebase.failed()) {
     Serial.print("pushing /invitations failed:");
     Serial.println(Firebase.error());  
+    colorRGB(0,255,255);
+    delay(500);
     return;
   }else{
     colorRGB(255,0,255);
@@ -77,7 +83,7 @@ void loop() {
   
   Serial.println(id);
 
-  delay(150);
+  delay(500);
   //digitalWrite(greenPin,LOW);
 }
 
