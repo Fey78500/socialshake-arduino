@@ -67,7 +67,7 @@ void loop() {
   obj["gloveIdTo"] = String(id);
 
   //Push to firebase
-  Firebase.push("invitations", obj);
+  Firebase.push("temp", obj);
   // handle error
   if (Firebase.failed()) {
     Serial.print("pushing /invitations failed:");
